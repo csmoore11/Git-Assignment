@@ -1,0 +1,16 @@
+<template>
+    <page-header title="Prayer Time" image.bind="prayerTimeImageURL"></page-header>
+
+    <page-body>
+        <card if.bind="prayerRequest.title">
+            <card-header title.bind="prayerRequest.title"></card-header>
+
+            <p>${prayerRequest.description} - ${prayerRequest.author}</p>
+        </card>
+
+        <button click.delegate="navigationService.go('#/prayer-requests/form')">
+            Add a Prayer Request
+        </button>
+    </page-body>
+
+</template>

@@ -1,0 +1,44 @@
+<template>
+    <require from="./app.css"></require>
+
+    <div class="statusbar-overlay"></div>
+    <div class="panel-overlay"></div>
+
+    <navigation router.bind="router" align-right="true">
+        <div slot="before-navigation">
+            <profile-summary user.bind="user" if.bind="userService.isAuthenticated"></profile-summary>
+        </div>
+    </navigation>
+
+    <div class="views" class.bind="router.currentInstruction.config.name">
+        <div class="view view-main" data-page="home">
+            <div class="pages toolbar-through">
+                <div class="page navbar-fixed" data-page="home">
+                    <div class="navbar">
+                        <div class="navbar-inner">
+                            <div class="left">
+                                <a href="#" class="link back-button icon-only" click.delegate="router.navigateBack()" click.trigger="showFooter = true" class.bind="router.currentInstruction.config.name === 'home' ? 'hidden' : ''">
+                                    <i class="icon icon-back"></i>
+                                </a>
+                            </div>
+
+                            <div class="center sliding">TRBC</div>
+
+                            <div class="right">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <flash></flash>
+                    <tabs tabs.bind="tabs" if.bind="showFooter && router.currentInstruction.config.name !== 'login'"></tabs>
+
+                    <div class="page-content">
+                        <router-view></router-view>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <loading-indicator></loading-indicator>
+</template>

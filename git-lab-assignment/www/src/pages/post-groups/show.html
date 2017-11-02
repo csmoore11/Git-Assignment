@@ -1,0 +1,57 @@
+<template>
+    <require from="../../resources/templates/paged-content/paged-content"></require>
+    <require from="../../resources/templates/filter-content/filter-content"></require>
+
+    <div class="page-header-wrap">
+        <page-header if.bind="postGroup.title" title.bind="postGroup.title" image.bind="postGroup.media.url"></page-header>
+
+        <div class="search-icon-wrap" if.bind="postGroup.postGroups.length === 0">
+            <i class="icon fa fa-search"></i>
+        </div>
+    </div>
+
+    <page-body>
+        <filter-content
+            extra-fields.bind="postGroup.rssMetadata"
+            data.bind="postGroup"
+            filtered-posts.bind="filteredPosts"
+            class="accordion-target"
+            style="display: none;"
+            if.bind="postGroup.postGroups.length == 0"
+        >
+        </filter-content>
+
+        <paged-content class="post-group-paged-content"
+                       content.bind="filteredPosts"
+                       limit-per-page.bind="5"
+                       current-page-index.bind="pagedContentMemory.pagedIndex"
+                       sort-by.bind="'date'"
+                       sort-direction.bind="'descending'" if.bind="postGroup.postGroups.length == 0">
+            <template replace-part="paged-content-list-item">
+                <div click.trigger="navigationService.go(item)">
+                    <arrow-card>
+                        <card-header title.bind="item.title"></card-header>
+
+                        <div class="post-group-post-summary" innerHTML.bind="item.summary | markdown"></div>
+                    </arrow-card>
+                </div>
+            </template>
+        </paged-content>
+
+        <div if.bind="postGroup.postGroups.length > 0">
+            <div innerHTML.bind="postGroup.postGroupsContent | markdown"></div>
+            <div class="associated-postGroups-container">
+                <div class="associated-postGroups-list">
+                    <a click.delegate="navigationService.getPostGroupDestination(pg)" repeat.for="pg of postGroup.postGroups" class="card-wrap">
+                        <card>
+                            <card-header title.bind="pg.title"></card-header>
+                            <share-link if.bind="pg.lastPost.sharingInfo" sharing-info.bind="pg.lastPost.sharingInfo"></share-link>
+                            <image-embed if.bind="pg.media.url" source.bind="pg.media.url" full-width="true"></image-embed>
+                            <div innerHTML.bind="pg.lastPost.summary | markdown" if.bind="pg.lastPost" class="home-postGroup-summary"></div>
+                        </card>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </page-body>
+</template>
